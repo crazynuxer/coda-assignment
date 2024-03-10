@@ -105,7 +105,7 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
           "s3:PutObject"
         ],
         Effect   = "Allow",
-        Resource = ["arn:aws:s3:::${var.s3_codepipeline_artifact}/*",aws_codebuild_project.coda_project.arn]
+        Resource = ["arn:aws:s3:::${var.s3_codepipeline_artifact}/*", aws_codebuild_project.coda_project.arn]
       }
     ]
   })
@@ -192,13 +192,29 @@ resource "aws_iam_policy" "codepipeline_codedeploy_policy" {
       {
         Effect = "Allow",
         Action = [
+          "codedeploy:CreateApplication",
           "codedeploy:CreateDeployment",
+          "codedeploy:CreateDeploymentGroup",
+          "codedeploy:GetApplication",
           "codedeploy:GetDeployment",
-          "codedeploy:GetDeploymentConfig",
           "codedeploy:GetDeploymentGroup",
           "codedeploy:ListApplications",
           "codedeploy:ListDeploymentGroups",
-          "codedeploy:ListDeploymentConfigs"
+          "codedeploy:ListDeployments",
+          "codedeploy:StopDeployment",
+          "codedeploy:GetDeploymentTarget",
+          "codedeploy:ListDeploymentTargets",
+          "codedeploy:GetDeploymentConfig",
+          "codedeploy:GetApplicationRevision",
+          "codedeploy:RegisterApplicationRevision",
+          "codedeploy:BatchGetApplicationRevisions",
+          "codedeploy:BatchGetDeploymentGroups",
+          "codedeploy:BatchGetDeployments",
+          "codedeploy:BatchGetApplications",
+          "codedeploy:ListApplicationRevisions",
+          "codedeploy:ListDeploymentConfigs",
+          "codedeploy:ContinueDeployment",
+          "codedeploy:GetDeploymentConfig"
         ],
         Resource = [
           "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:application:${var.codedeploy_deployment_app_name}",
