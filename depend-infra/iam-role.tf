@@ -73,3 +73,58 @@ resource "aws_iam_role_policy_attachment" "codebuild_cloudwatch_logs_policy_atta
   policy_arn = aws_iam_policy.codebuild_cloudwatch_logs_policy.arn
 }
 
+
+resource "aws_iam_role" "codepipeline_role" {
+  name = "codepipeline_role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Action = "sts:AssumeRole",
+      Effect = "Allow",
+      Principal = {
+        Service = "codepipeline.amazonaws.com"
+      },
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "codepipeline_policy" {
+  role = aws_iam_role.codepipeline_role.id
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = [
+          "codebuild:BatchGetBuilds",
+          "codebuild:StartBuild",
+          "s3:GetObject",
+          "s3:GetObjectVersion",
+          "s3:GetBucketVersioning",
+          "s3:PutObject"
+        ],
+        Effect   = "Allow",
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_policy" "codestar_connections_policy" {
+  name        = "CodeStarConnectionsPolicy"
+  description = "Allow use of CodeStar Connections"
+
+  policy = jsonencode({
+    Version: "2012-10-17",
+    Statement: [{
+      Effect: "Allow",
+      Action: "codestar-connections:UseConnection",
+      Resource: "arn:aws:codestar-connections:ap-southeast-1:${data.aws_caller_identity.current.account_id}:connection/a630916d-8652-491e-a028-08d27f850bb2"
+    }]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "codestar_connections_attach" {
+  role       = aws_iam_role.codepipeline_role.name # Replace with your role's name
+  policy_arn = aws_iam_policy.codestar_connections_policy.arn
+}
