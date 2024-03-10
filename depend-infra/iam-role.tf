@@ -128,3 +128,28 @@ resource "aws_iam_role_policy_attachment" "codestar_connections_attach" {
   role       = aws_iam_role.codepipeline_role.name # Replace with your role's name
   policy_arn = aws_iam_policy.codestar_connections_policy.arn
 }
+
+resource "aws_iam_policy" "codebuild_s3_access" {
+  name        = "CodeBuildS3Access"
+  description = "Allow CodeBuild to access artifacts in S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:GetObjectVersion"
+        ],
+        Resource = "arn:aws:s3:::${var.s3_codepipeline_artifact}/coda-pipeline/source_out/*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_s3_access_attach" {
+  role       = aws_iam_role.codebuild_role.name # Replace with your CodeBuild role's name
+  policy_arn = aws_iam_policy.codebuild_s3_access.arn
+}
+
