@@ -7,7 +7,3 @@ phases:
       - aws s3 cp html/sample.html s3://$S3_BUCKET/sample.html
       - echo "Updating SSM Parameter..."
       - aws ssm put-parameter --name $SSM_PATH --value "my-file.html" --type String --overwrite
-
-artifacts:
-  files:
-    - sample.html
