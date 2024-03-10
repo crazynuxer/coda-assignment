@@ -13,9 +13,7 @@ phases:
       - cat task.json
       - aws ecs register-task-definition --cli-input-json file://task.json > result.json
       - cat result.json
-      - newarn=$(head result.json  |grep taskDefinitionArn | awk '{print $2}' | sed -e 's/"//g' -e 's/,//g')
-      - sed -i -e "s/arn/$(head result.json  |grep taskDefinitionArn | awk '{print $2}' | sed -e 's/\"//g' -e 's/,//g')/g" appspec.yaml
-      - cat appspec.yaml
+      - /bin/sh update-appspec.sh
 
 artifacts:
   files:
