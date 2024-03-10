@@ -23,3 +23,13 @@ variable "codepipeline_connection_arn" {
   description = "codestart arn for codepipeline connection"
   type        = string
 }
+
+variable "codedeploy_deployment_group_name" {
+  description = "codedeploy deployment group name"
+  type        = string
+}
+
+variable "codedeploy_deployment_app_name" {
+  description = "codedeploy deployment app name"
+  type        = string
+}

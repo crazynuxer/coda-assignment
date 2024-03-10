@@ -115,11 +115,11 @@ resource "aws_iam_policy" "codestar_connections_policy" {
   description = "Allow use of CodeStar Connections"
 
   policy = jsonencode({
-    Version: "2012-10-17",
-    Statement: [{
-      Effect: "Allow",
-      Action: "codestar-connections:UseConnection",
-      Resource: "arn:aws:codestar-connections:ap-southeast-1:${data.aws_caller_identity.current.account_id}:connection/a630916d-8652-491e-a028-08d27f850bb2"
+    Version : "2012-10-17",
+    Statement : [{
+      Effect : "Allow",
+      Action : "codestar-connections:UseConnection",
+      Resource : "arn:aws:codestar-connections:ap-southeast-1:${data.aws_caller_identity.current.account_id}:connection/a630916d-8652-491e-a028-08d27f850bb2"
     }]
   })
 }

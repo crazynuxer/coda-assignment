@@ -46,4 +46,19 @@ resource "aws_codepipeline" "coda_pipeline" {
       }
     }
   }
+  stage {
+    name = "Deploy"
+    action {
+      name            = "Deploy"
+      category        = "Deploy"
+      owner           = "AWS"
+      provider        = "CodeDeploy"
+      version         = "1"
+      input_artifacts = ["build_output"] # Even if not used, specified for structure
+      configuration = {
+        ApplicationName     = var.codedeploy_deployment_app_name # Your CodeDeploy application name
+        DeploymentGroupName = var.codedeploy_deployment_group_name
+      }
+    }
+  }
 }
