@@ -13,3 +13,13 @@ variable "ssm_parameter_path" {
   description = "ssm parameter store path"
   type        = string
 }
+
+variable "s3_codepipeline_artifact" {
+  description = "Name of the S3 bucket for codepipeline artifact files"
+  type        = string
+}
+
+variable "codepipeline_connection_arn" {
+  description = "codestart arn for codepipeline connection"
+  type        = string
+}
