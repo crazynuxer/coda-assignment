@@ -153,3 +153,30 @@ resource "aws_iam_role_policy_attachment" "codebuild_s3_access_attach" {
   policy_arn = aws_iam_policy.codebuild_s3_access.arn
 }
 
+resource "aws_iam_policy" "codedeploy_s3_access" {
+  name        = "CodeDeployS3Access"
+  description = "Allow CodeDeploy to access artifacts in S3"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "s3:GetObject",
+          "s3:ListBucket"
+        ],
+        Resource = [
+          "arn:aws:s3:::${var.s3_codepipeline_artifact}",
+          "arn:aws:s3:::${var.s3_codepipeline_artifact}/*"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "codedeploy_s3_access_attach" {
+  role       = var.codedeploy_role_name
+  policy_arn = aws_iam_policy.codedeploy_s3_access.arn
+}
+

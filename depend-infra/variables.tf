@@ -33,3 +33,8 @@ variable "codedeploy_deployment_app_name" {
   description = "codedeploy deployment app name"
   type        = string
 }
+
+variable "codedeploy_role_name" {
+  description = "codedeploy role name"
+  type        = string
+}
