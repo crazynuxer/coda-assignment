@@ -11,4 +11,5 @@ phases:
 
 artifacts:
   files:
-    - html/sample.html  
+    - html/sample.html
+    - appspec.yaml  
