@@ -13,6 +13,28 @@ resource "aws_iam_role" "codebuild_role" {
   })
 }
 
+resource "aws_iam_policy" "codebuild_ecs_policy" {
+  name        = "CodeBuildECSTaskDefinitionPolicy"
+  path        = "/"
+  description = "IAM policy for CodeBuild to manage ECS Task Definitions"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect   = "Allow",
+        Action   = [
+          "ecs:RegisterTaskDefinition",
+          "ecs:DeregisterTaskDefinition",
+          "ecs:ListTaskDefinitions"
+        ],
+        Resource = "arn:aws:ecs:ap-southeast-1:172842961727:task-definition/basic-example:*"
+      }
+    ]
+  })
+}
+
+
 resource "aws_iam_policy" "codebuild_policy" {
   name = "CodeBuildPolicy"
 
@@ -43,6 +65,11 @@ resource "aws_iam_policy" "codebuild_policy" {
 resource "aws_iam_role_policy_attachment" "codebuild_attach" {
   role       = aws_iam_role.codebuild_role.name
   policy_arn = aws_iam_policy.codebuild_policy.arn
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_attach_register_task_ecs" {
+  role       = aws_iam_role.codebuild_role.name
+  policy_arn = aws_iam_policy.codebuild_ecs_policy.arn
 }
 
 resource "aws_iam_policy" "codebuild_cloudwatch_logs_policy" {

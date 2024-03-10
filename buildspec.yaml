@@ -8,6 +8,13 @@ phases:
       - aws s3 cp html/sample.html s3://$S3_BUCKET/sample-$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8).html
       - echo "Updating SSM Parameter..."
       - aws ssm put-parameter --name $SSM_PATH --value "sample-$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8).html" --type String --overwrite
+      - aws s3 cp s3://$S3_BUCKET/codedeploy/test.json task.json
+      - sed -i -e "s/sample-.*/sample-$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c1-8).html\"/g" task.json
+      - cat task.json
+      - aws ecs register-task-definition --cli-input-json file://task.json > result.json
+      - cat result.json
+      - newarn=$(head result.json  |grep taskDefinitionArn | awk '{print $2}' | sed -e 's/"//g' -e 's/,//g')
+      - sed -i -e "s/arn/$(newarn)/" appspec.yaml
 
 artifacts:
   files:
