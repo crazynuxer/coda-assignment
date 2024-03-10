@@ -258,3 +258,28 @@ resource "aws_iam_role_policy_attachment" "codepipeline_codedeploy_attach" {
   policy_arn = aws_iam_policy.codepipeline_codedeploy_policy.arn
 }
 
+resource "aws_iam_policy" "codebuild_pass_role_policy" {
+  name        = "CodeBuildPassRolePolicy"
+  description = "Allows CodeBuild to pass ECS task role"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect    = "Allow",
+        Action    = "iam:PassRole",
+        Resource  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/basic-example-ecs-task",
+        Condition = {
+          StringEqualsIfExists = {
+            "iam:PassedToService": "ecs-tasks.amazonaws.com"
+          }
+        }
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "codebuild_pass_role_attach" {
+  role       = aws_iam_role.codebuild_role.name  # Replace with the actual role name if managed outside Terraform
+  policy_arn = aws_iam_policy.codebuild_pass_role_policy.arn
+}
