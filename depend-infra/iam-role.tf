@@ -202,7 +202,8 @@ resource "aws_iam_policy" "codepipeline_codedeploy_policy" {
         ],
         Resource = [
           "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:application:${var.codedeploy_deployment_app_name}",
-          "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:deploymentgroup:${var.codedeploy_deployment_app_name}/${var.codedeploy_deployment_group_name}"
+          "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:deploymentgroup:${var.codedeploy_deployment_app_name}/${var.codedeploy_deployment_group_name}",
+          "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:deploymentconfig:*"
         ]
       }
     ]
