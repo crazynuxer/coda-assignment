@@ -22,8 +22,8 @@ resource "aws_iam_policy" "codebuild_ecs_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect   = "Allow",
-        Action   = [
+        Effect = "Allow",
+        Action = [
           "ecs:RegisterTaskDefinition",
           "ecs:DeregisterTaskDefinition",
           "ecs:ListTaskDefinitions"
@@ -266,12 +266,15 @@ resource "aws_iam_policy" "codebuild_pass_role_policy" {
     Version = "2012-10-17",
     Statement = [
       {
-        Effect    = "Allow",
-        Action    = "iam:PassRole",
-        Resource  = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/basic-example-ecs-task",
+        Effect = "Allow",
+        Action = "iam:PassRole",
+        Resource = [
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/basic-example-ecs-task",
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/basic-example-ecs-exec"
+        ],
         Condition = {
           StringEqualsIfExists = {
-            "iam:PassedToService": "ecs-tasks.amazonaws.com"
+            "iam:PassedToService" : "ecs-tasks.amazonaws.com"
           }
         }
       }
@@ -280,6 +283,6 @@ resource "aws_iam_policy" "codebuild_pass_role_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "codebuild_pass_role_attach" {
-  role       = aws_iam_role.codebuild_role.name  # Replace with the actual role name if managed outside Terraform
+  role       = aws_iam_role.codebuild_role.name # Replace with the actual role name if managed outside Terraform
   policy_arn = aws_iam_policy.codebuild_pass_role_policy.arn
 }
