@@ -1,0 +1,13 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      - echo "Uploading file to S3..."
+      - aws s3 cp html/sample.html s3://$S3_BUCKET/sample.html
+      - echo "Updating SSM Parameter..."
+      - aws ssm put-parameter --name "/webserver/html_file_key" --value "my-file.html" --type String --overwrite
+
+artifacts:
+  files:
+    - sample.html
