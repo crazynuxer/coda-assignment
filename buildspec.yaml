@@ -4,6 +4,7 @@ phases:
   build:
     commands:
       - echo "Uploading file to S3..."
+      - env
       - aws s3 cp html/sample.html s3://$S3_BUCKET/sample.html
       - echo "Updating SSM Parameter..."
-      - aws ssm put-parameter --name $SSM_PATH --value "my-file.html" --type String --overwrite
+      - aws ssm put-parameter --name $SSM_PATH --value "sample.html" --type String --overwrite
