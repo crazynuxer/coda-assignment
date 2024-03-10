@@ -15,6 +15,10 @@ resource "aws_codebuild_project" "coda_project" {
     environment_variable {
       name  = "S3_BUCKET"
       value = var.s3_bucket_html
+    },
+    environment_variable {
+      name  = "SSM_PATH"
+      value = var.ssm_parameter_path
     }
   }
 
@@ -22,7 +26,7 @@ resource "aws_codebuild_project" "coda_project" {
     type              = "GITHUB"
     location          = "https://github.com/crazynuxer/coda-assignment.git"
     git_clone_depth   = 1
-    buildspec         = "buildspec.yml"
+    buildspec         = "buildspec.yaml"
     report_build_status = true
   }
 
