@@ -197,7 +197,8 @@ resource "aws_iam_policy" "codepipeline_codedeploy_policy" {
           "codedeploy:GetDeploymentConfig",
           "codedeploy:GetDeploymentGroup",
           "codedeploy:ListApplications",
-          "codedeploy:ListDeploymentGroups"
+          "codedeploy:ListDeploymentGroups",
+          "codedeploy:ListDeploymentConfigs"
         ],
         Resource = [
           "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:application:${var.codedeploy_deployment_app_name}",
