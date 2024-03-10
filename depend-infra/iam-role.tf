@@ -98,13 +98,14 @@ resource "aws_iam_role_policy" "codepipeline_policy" {
         Action = [
           "codebuild:BatchGetBuilds",
           "codebuild:StartBuild",
+          "codebuild:StopBuild",
           "s3:GetObject",
           "s3:GetObjectVersion",
           "s3:GetBucketVersioning",
           "s3:PutObject"
         ],
         Effect   = "Allow",
-        Resource = "*"
+        Resource = ["arn:aws:s3:::${var.s3_codepipeline_artifact}/*",aws_codebuild_project.coda_project.arn]
       }
     ]
   })
@@ -140,9 +141,10 @@ resource "aws_iam_policy" "codebuild_s3_access" {
         Effect = "Allow",
         Action = [
           "s3:GetObject",
+          "s3:PutObject",
           "s3:GetObjectVersion"
         ],
-        Resource = "arn:aws:s3:::${var.s3_codepipeline_artifact}/coda-pipeline/source_out/*"
+        Resource = "arn:aws:s3:::${var.s3_codepipeline_artifact}/coda-pipeline/*"
       }
     ]
   })
@@ -164,7 +166,6 @@ resource "aws_iam_policy" "codedeploy_s3_access" {
         Effect = "Allow",
         Action = [
           "s3:GetObject",
-          "s3:PutObject",
           "s3:ListBucket"
         ],
         Resource = [
