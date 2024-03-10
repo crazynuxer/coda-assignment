@@ -32,8 +32,8 @@ resource "aws_iam_policy" "codebuild_policy" {
         ]
       },
       {
-        Effect = "Allow",
-        Action = "ssm:PutParameter",
+        Effect   = "Allow",
+        Action   = "ssm:PutParameter",
         Resource = "arn:aws:ssm:*:*:parameter/webserver/html_file_key"
       }
     ]
