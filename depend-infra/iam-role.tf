@@ -34,7 +34,7 @@ resource "aws_iam_policy" "codebuild_policy" {
       {
         Effect   = "Allow",
         Action   = "ssm:PutParameter",
-        Resource = "arn:aws:ssm:*:*:parameter/webserver/html_file_key"
+        Resource = "arn:aws:ssm:*:*:parameter${var.ssm_parameter_path}"
       }
     ]
   })
@@ -60,8 +60,8 @@ resource "aws_iam_policy" "codebuild_cloudwatch_logs_policy" {
           "logs:PutLogEvents"
         ],
         Resource = [
-          "arn:aws:logs:ap-southeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/codaproject",
-          "arn:aws:logs:ap-southeast-1:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/codaproject:*"
+          "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/codaproject",
+          "arn:aws:logs:${var.aws_region}:${data.aws_caller_identity.current.account_id}:log-group:/aws/codebuild/codaproject:*"
         ]
       }
     ]
@@ -120,7 +120,7 @@ resource "aws_iam_policy" "codestar_connections_policy" {
     Statement : [{
       Effect : "Allow",
       Action : "codestar-connections:UseConnection",
-      Resource : "arn:aws:codestar-connections:ap-southeast-1:${data.aws_caller_identity.current.account_id}:connection/a630916d-8652-491e-a028-08d27f850bb2"
+      Resource : var.codepipeline_connection_arn
     }]
   })
 }
@@ -180,5 +180,36 @@ resource "aws_iam_policy" "codedeploy_s3_access" {
 resource "aws_iam_role_policy_attachment" "codedeploy_s3_access_attach" {
   role       = var.codedeploy_role_name
   policy_arn = aws_iam_policy.codedeploy_s3_access.arn
+}
+
+resource "aws_iam_policy" "codepipeline_codedeploy_policy" {
+  name        = "CodePipelineCodeDeployPolicy"
+  description = "Policy granting CodePipeline access to CodeDeploy"
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect = "Allow",
+        Action = [
+          "codedeploy:CreateDeployment",
+          "codedeploy:GetDeployment",
+          "codedeploy:GetDeploymentConfig",
+          "codedeploy:GetDeploymentGroup",
+          "codedeploy:ListApplications",
+          "codedeploy:ListDeploymentGroups"
+        ],
+        Resource = [
+          "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:application:${var.codedeploy_deployment_app_name}",
+          "arn:aws:codedeploy:${var.aws_region}:${data.aws_caller_identity.current.account_id}:deploymentgroup:${var.codedeploy_deployment_app_name}/${var.codedeploy_deployment_group_name}"
+        ]
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "codepipeline_codedeploy_attach" {
+  role       = aws_iam_role.codepipeline_role.name # Make sure this matches the exact name of your CodePipeline IAM role
+  policy_arn = aws_iam_policy.codepipeline_codedeploy_policy.arn
 }
 
