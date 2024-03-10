@@ -1,0 +1,9 @@
+version: 0.0
+Resources:
+  - TargetService:
+      Type: AWS::ECS::Service
+      Properties:
+        TaskDefinition: "arn:aws:ecs:ap-southeast-1:172842961727:task-definition/basic-example:19"
+        LoadBalancerInfo:
+          ContainerName: "nginx"
+          ContainerPort: 80
