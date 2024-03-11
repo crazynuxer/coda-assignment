@@ -1,6 +1,17 @@
 version: 0.2
 
 phases:
+  pre_build:
+    commands:
+      - |
+        # Check for changes in the html/ directory
+        CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD)
+        if echo "$CHANGED_FILES" | grep -qvE 'html/'; then
+          echo "No changes in html/ directory. Skipping build."
+          exit 1
+        else
+          echo "Changes detected in html/ directory. Continuing build."
+        fi
   build:
     commands:
       - echo "Uploading file to S3..."
