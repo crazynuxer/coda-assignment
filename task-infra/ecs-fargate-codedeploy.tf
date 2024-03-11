@@ -48,8 +48,9 @@ module "basic-example" {
       name      = "downloader",
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:latest", # Example image, assuming custom script is built on this
       essential = false,
-
-      command = ["bash", "-c", "aws s3 cp s3://${var.s3_bucket_html}/$HTML_FILE_KEY /usr/share/nginx/html/index.html"], # Example command
+      cpu       = 128,
+      memory    = 128,
+      command   = ["bash", "-c", "aws s3 cp s3://${var.s3_bucket_html}/$HTML_FILE_KEY /usr/share/nginx/html/index.html"], # Example command
       environment = [
         {
           name  = "AWS_REGION",
@@ -80,6 +81,8 @@ module "basic-example" {
       name      = "nginx",
       image     = "nginx:latest",
       essential = true,
+      cpu       = 128,
+      memory    = 128,
       portMappings = [
         {
           containerPort = 80,
