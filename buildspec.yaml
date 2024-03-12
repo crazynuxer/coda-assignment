@@ -13,7 +13,7 @@ phases:
       - cat task.json
       - aws ecs register-task-definition --cli-input-json file://task.json > result.json
       - cat result.json
-      - /bin/sh update-appspec.sh
+      #- /bin/sh update-appspec.sh
 
 artifacts:
   files:

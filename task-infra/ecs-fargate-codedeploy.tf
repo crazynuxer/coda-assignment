@@ -48,7 +48,7 @@ module "basic-example" {
       name      = "downloader",
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:latest", # Example image, assuming custom script is built on this
       essential = false,
-      command   = ["bash", "-c", "aws s3 cp s3://${var.s3_bucket_html}/$HTML_FILE_KEY /usr/share/nginx/html/index.html"], # Example command
+      command   = ["bash", "-c", "htmlFile=$(aws ssm get-parameter --name $HTML_FILE_KEY | grep -o '\"Value\": \"[^\"]*\"' |  awk -F': \"' '{print $2}' | sed -e 's|\"||g') aws s3 cp s3://${var.s3_bucket_html}/$htmlFile /usr/share/nginx/html/index.html"], # Example command
       environment = [
         {
           name  = "AWS_REGION",
@@ -56,7 +56,7 @@ module "basic-example" {
         },
         {
           name  = "HTML_FILE_KEY",
-          value = data.aws_ssm_parameter.html_file_key.value
+          value = data.aws_ssm_parameter.html_file_key.name
         }
       ],
       mountPoints = [
