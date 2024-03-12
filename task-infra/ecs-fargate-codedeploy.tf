@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "allow_lb_to_ecs" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs_sg.id
-  source_security_group_id = aws_security_group.alb_sg.id 
+  source_security_group_id = aws_security_group.alb_sg.id
 }
 
 module "basic-example" {
@@ -46,8 +46,8 @@ module "basic-example" {
   task_container_definitions = [
     {
       name      = "downloader",
-      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-python", 
-      command   = ["bash","-c","/usr/bin/python3 /opt/download.py"]
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-python",
+      command   = ["bash", "-c", "/usr/bin/python3 /opt/download.py"]
       essential = false,
       environment = [
         {
@@ -55,10 +55,10 @@ module "basic-example" {
           value = "${var.aws_region}" # Specify the appropriate region
         },
         {
-	  name = "BUCKET_NAME"
+          name  = "BUCKET_NAME"
           value = var.s3_bucket_html
 
-},
+        },
         {
           name  = "HTML_FILE_KEY",
           value = data.aws_ssm_parameter.html_file_key.name
@@ -209,3 +209,4 @@ resource "aws_iam_role_policy_attachment" "ecs_pull_policy_attachment" {
   role       = module.basic-example.task_definition_execution_role_name
   policy_arn = aws_iam_policy.ecr_pull_policy.arn
 }
+
