@@ -46,7 +46,7 @@ module "basic-example" {
   task_container_definitions = [
     {
       name      = "downloader",
-      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto32", # Example image, assuming custom script is built on this
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-ubuntu", # Example image, assuming custom script is built on this
       essential = false,
       environment = [
         {
