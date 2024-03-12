@@ -47,6 +47,7 @@ module "basic-example" {
     {
       name      = "downloader",
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-ubuntu", # Example image, assuming custom script is built on this
+      command   = ["bash","-c","/usr/bin/python3 /opt/download.py"]
       essential = false,
       environment = [
         {
