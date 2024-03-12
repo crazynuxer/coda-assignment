@@ -21,7 +21,7 @@ resource "aws_security_group_rule" "allow_lb_to_ecs" {
   to_port                  = 80
   protocol                 = "tcp"
   security_group_id        = aws_security_group.ecs_sg.id
-  source_security_group_id = aws_security_group.alb_sg.id # Replace with your load balancer's security group ID
+  source_security_group_id = aws_security_group.alb_sg.id 
 }
 
 module "basic-example" {
@@ -46,7 +46,7 @@ module "basic-example" {
   task_container_definitions = [
     {
       name      = "downloader",
-      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-ubuntu", # Example image, assuming custom script is built on this
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-python", 
       command   = ["bash","-c","/usr/bin/python3 /opt/download.py"]
       essential = false,
       environment = [
