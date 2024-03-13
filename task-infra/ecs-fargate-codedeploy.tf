@@ -82,7 +82,8 @@ module "basic-example" {
     },
     {
       name      = "nginx",
-      image     = "nginx:latest",
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:nginx",
+      command = ["bash","-c","while ! [ -f /usr/share/nginx/html/index.html ]; do sleep 1; done && nginx -g 'daemon off;'"]
       essential = true,
       portMappings = [
         {
