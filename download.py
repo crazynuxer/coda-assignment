@@ -8,5 +8,5 @@ bucketname = os.environ.get('BUCKET_NAME')
 filekey = os.environ.get('HTML_FILE_KEY')
 filename = ssm.get_parameter(Name=filekey)
 
-with open('/usr/share/nginx/html/index.html', 'wb') as f:
+with open('/var/www/html/index.html', 'wb') as f:
     s3.download_fileobj(bucketname, filename['Parameter']['Value'], f)

@@ -46,7 +46,7 @@ module "basic-example" {
   task_container_definitions = [
     {
       name      = "downloader",
-      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-python",
+      image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-python-fix",
       command   = ["bash", "-c", "/usr/bin/python3 /opt/download.py"]
       essential = true,
       environment = [
@@ -83,7 +83,7 @@ module "basic-example" {
     {
       name      = "nginx",
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:nginx",
-      command = ["bash","-c","while ! [ -f /usr/share/nginx/html/index.html ]; do sleep 1; done && nginx -g 'daemon off;'"]
+      command = ["bash","-c","while ! [ -f /var/www/html/index.html ]; do sleep 1; done && nginx -g 'daemon off;'"]
       essential = true,
       portMappings = [
         {
