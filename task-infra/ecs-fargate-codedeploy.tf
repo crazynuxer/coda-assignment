@@ -48,7 +48,7 @@ module "basic-example" {
       name      = "downloader",
       image     = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.aws_region}.amazonaws.com/awscli:boto3-python",
       command   = ["bash", "-c", "/usr/bin/python3 /opt/download.py"]
-      essential = false,
+      essential = true,
       environment = [
         {
           name  = "AWS_REGION",
@@ -67,7 +67,7 @@ module "basic-example" {
       mountPoints = [
         {
           sourceVolume  = "html_storage",
-          containerPath = "/usr/share/nginx/html",
+          containerPath = "/var/www/html",
           readOnly      = false
         }
       ],
@@ -95,7 +95,7 @@ module "basic-example" {
       mountPoints = [
         {
           sourceVolume  = "html_storage",
-          containerPath = "/usr/share/nginx/html",
+          containerPath = "/var/www/html",
           readOnly      = false
         }
       ],
